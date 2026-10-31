@@ -1,0 +1,1 @@
+for f in 0 1 2 3 4; do ( for s in 0 1 2; do [ -f results/f${f}_PatchTST-PLE-input_s$s.csv ] || python3 run_detect.py --fold $f --model PatchTST-PLE-input --seeds $s >> logs/f${f}_PatchTST-PLE-input.log 2>&1; done ) & done; wait; echo ALLDONE > logs/pleinput_done

@@ -1,0 +1,515 @@
+{
+  "split_seed": 20261028,
+  "group_rule": "Connected components: overlapping absolute intervals OR identical timestamp+8 sensors OR identical 8 sensors; labels unchanged",
+  "groups": [
+    [
+      "other/1.csv"
+    ],
+    [
+      "other/10.csv",
+      "other/11.csv"
+    ],
+    [
+      "other/12.csv",
+      "other/13.csv"
+    ],
+    [
+      "other/14.csv"
+    ],
+    [
+      "other/2.csv",
+      "other/3.csv",
+      "other/4.csv"
+    ],
+    [
+      "other/5.csv"
+    ],
+    [
+      "other/6.csv"
+    ],
+    [
+      "other/7.csv"
+    ],
+    [
+      "other/8.csv"
+    ],
+    [
+      "other/9.csv"
+    ],
+    [
+      "valve1/0.csv"
+    ],
+    [
+      "valve1/1.csv"
+    ],
+    [
+      "valve1/10.csv"
+    ],
+    [
+      "valve1/11.csv"
+    ],
+    [
+      "valve1/12.csv"
+    ],
+    [
+      "valve1/13.csv"
+    ],
+    [
+      "valve1/14.csv"
+    ],
+    [
+      "valve1/15.csv"
+    ],
+    [
+      "valve1/2.csv"
+    ],
+    [
+      "valve1/3.csv"
+    ],
+    [
+      "valve1/4.csv"
+    ],
+    [
+      "valve1/5.csv"
+    ],
+    [
+      "valve1/6.csv"
+    ],
+    [
+      "valve1/7.csv"
+    ],
+    [
+      "valve1/8.csv"
+    ],
+    [
+      "valve1/9.csv"
+    ],
+    [
+      "valve2/0.csv"
+    ],
+    [
+      "valve2/1.csv"
+    ],
+    [
+      "valve2/2.csv"
+    ],
+    [
+      "valve2/3.csv"
+    ]
+  ],
+  "pairs": [
+    {
+      "a": "other/10.csv",
+      "b": "other/11.csv",
+      "time_overlap": true,
+      "shared_time_sensor": 21,
+      "shared_sensor_only": 21
+    },
+    {
+      "a": "other/12.csv",
+      "b": "other/13.csv",
+      "time_overlap": true,
+      "shared_time_sensor": 349,
+      "shared_sensor_only": 349
+    },
+    {
+      "a": "other/2.csv",
+      "b": "other/3.csv",
+      "time_overlap": true,
+      "shared_time_sensor": 120,
+      "shared_sensor_only": 120
+    },
+    {
+      "a": "other/3.csv",
+      "b": "other/4.csv",
+      "time_overlap": true,
+      "shared_time_sensor": 228,
+      "shared_sensor_only": 228
+    }
+  ],
+  "buckets": [
+    [
+      "other/2.csv",
+      "other/3.csv",
+      "other/4.csv",
+      "valve1/6.csv",
+      "valve2/3.csv",
+      "valve1/11.csv",
+      "valve1/15.csv"
+    ],
+    [
+      "other/10.csv",
+      "other/11.csv",
+      "valve2/0.csv",
+      "valve1/2.csv",
+      "valve1/12.csv",
+      "other/1.csv",
+      "valve1/9.csv"
+    ],
+    [
+      "other/12.csv",
+      "other/13.csv",
+      "valve1/7.csv",
+      "valve1/8.csv",
+      "valve1/5.csv",
+      "other/9.csv",
+      "valve1/14.csv"
+    ],
+    [
+      "valve2/1.csv",
+      "valve1/3.csv",
+      "other/8.csv",
+      "valve1/13.csv",
+      "other/14.csv",
+      "valve1/4.csv",
+      "other/7.csv"
+    ],
+    [
+      "valve1/0.csv",
+      "other/5.csv",
+      "valve2/2.csv",
+      "valve1/1.csv",
+      "other/6.csv",
+      "valve1/10.csv"
+    ]
+  ],
+  "folds": [
+    {
+      "fold": 0,
+      "train": [
+        "other/12.csv",
+        "other/13.csv",
+        "other/14.csv",
+        "other/5.csv",
+        "other/6.csv",
+        "other/7.csv",
+        "other/8.csv",
+        "other/9.csv",
+        "valve1/0.csv",
+        "valve1/1.csv",
+        "valve1/10.csv",
+        "valve1/13.csv",
+        "valve1/14.csv",
+        "valve1/3.csv",
+        "valve1/4.csv",
+        "valve1/5.csv",
+        "valve1/7.csv",
+        "valve1/8.csv",
+        "valve2/1.csv",
+        "valve2/2.csv"
+      ],
+      "val": [
+        "other/1.csv",
+        "other/10.csv",
+        "other/11.csv",
+        "valve1/12.csv",
+        "valve1/2.csv",
+        "valve1/9.csv",
+        "valve2/0.csv"
+      ],
+      "test": [
+        "other/2.csv",
+        "other/3.csv",
+        "other/4.csv",
+        "valve1/11.csv",
+        "valve1/15.csv",
+        "valve1/6.csv",
+        "valve2/3.csv"
+      ]
+    },
+    {
+      "fold": 1,
+      "train": [
+        "other/14.csv",
+        "other/2.csv",
+        "other/3.csv",
+        "other/4.csv",
+        "other/5.csv",
+        "other/6.csv",
+        "other/7.csv",
+        "other/8.csv",
+        "valve1/0.csv",
+        "valve1/1.csv",
+        "valve1/10.csv",
+        "valve1/11.csv",
+        "valve1/13.csv",
+        "valve1/15.csv",
+        "valve1/3.csv",
+        "valve1/4.csv",
+        "valve1/6.csv",
+        "valve2/1.csv",
+        "valve2/2.csv",
+        "valve2/3.csv"
+      ],
+      "val": [
+        "other/12.csv",
+        "other/13.csv",
+        "other/9.csv",
+        "valve1/14.csv",
+        "valve1/5.csv",
+        "valve1/7.csv",
+        "valve1/8.csv"
+      ],
+      "test": [
+        "other/1.csv",
+        "other/10.csv",
+        "other/11.csv",
+        "valve1/12.csv",
+        "valve1/2.csv",
+        "valve1/9.csv",
+        "valve2/0.csv"
+      ]
+    },
+    {
+      "fold": 2,
+      "train": [
+        "other/1.csv",
+        "other/10.csv",
+        "other/11.csv",
+        "other/2.csv",
+        "other/3.csv",
+        "other/4.csv",
+        "other/5.csv",
+        "other/6.csv",
+        "valve1/0.csv",
+        "valve1/1.csv",
+        "valve1/10.csv",
+        "valve1/11.csv",
+        "valve1/12.csv",
+        "valve1/15.csv",
+        "valve1/2.csv",
+        "valve1/6.csv",
+        "valve1/9.csv",
+        "valve2/0.csv",
+        "valve2/2.csv",
+        "valve2/3.csv"
+      ],
+      "val": [
+        "other/14.csv",
+        "other/7.csv",
+        "other/8.csv",
+        "valve1/13.csv",
+        "valve1/3.csv",
+        "valve1/4.csv",
+        "valve2/1.csv"
+      ],
+      "test": [
+        "other/12.csv",
+        "other/13.csv",
+        "other/9.csv",
+        "valve1/14.csv",
+        "valve1/5.csv",
+        "valve1/7.csv",
+        "valve1/8.csv"
+      ]
+    },
+    {
+      "fold": 3,
+      "train": [
+        "other/1.csv",
+        "other/10.csv",
+        "other/11.csv",
+        "other/12.csv",
+        "other/13.csv",
+        "other/2.csv",
+        "other/3.csv",
+        "other/4.csv",
+        "other/9.csv",
+        "valve1/11.csv",
+        "valve1/12.csv",
+        "valve1/14.csv",
+        "valve1/15.csv",
+        "valve1/2.csv",
+        "valve1/5.csv",
+        "valve1/6.csv",
+        "valve1/7.csv",
+        "valve1/8.csv",
+        "valve1/9.csv",
+        "valve2/0.csv",
+        "valve2/3.csv"
+      ],
+      "val": [
+        "other/5.csv",
+        "other/6.csv",
+        "valve1/0.csv",
+        "valve1/1.csv",
+        "valve1/10.csv",
+        "valve2/2.csv"
+      ],
+      "test": [
+        "other/14.csv",
+        "other/7.csv",
+        "other/8.csv",
+        "valve1/13.csv",
+        "valve1/3.csv",
+        "valve1/4.csv",
+        "valve2/1.csv"
+      ]
+    },
+    {
+      "fold": 4,
+      "train": [
+        "other/1.csv",
+        "other/10.csv",
+        "other/11.csv",
+        "other/12.csv",
+        "other/13.csv",
+        "other/14.csv",
+        "other/7.csv",
+        "other/8.csv",
+        "other/9.csv",
+        "valve1/12.csv",
+        "valve1/13.csv",
+        "valve1/14.csv",
+        "valve1/2.csv",
+        "valve1/3.csv",
+        "valve1/4.csv",
+        "valve1/5.csv",
+        "valve1/7.csv",
+        "valve1/8.csv",
+        "valve1/9.csv",
+        "valve2/0.csv",
+        "valve2/1.csv"
+      ],
+      "val": [
+        "other/2.csv",
+        "other/3.csv",
+        "other/4.csv",
+        "valve1/11.csv",
+        "valve1/15.csv",
+        "valve1/6.csv",
+        "valve2/3.csv"
+      ],
+      "test": [
+        "other/5.csv",
+        "other/6.csv",
+        "valve1/0.csv",
+        "valve1/1.csv",
+        "valve1/10.csv",
+        "valve2/2.csv"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "fold": 0,
+      "a": "train",
+      "b": "val",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 0,
+      "a": "train",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 0,
+      "a": "val",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 1,
+      "a": "train",
+      "b": "val",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 1,
+      "a": "train",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 1,
+      "a": "val",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 2,
+      "a": "train",
+      "b": "val",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 2,
+      "a": "train",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 2,
+      "a": "val",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 3,
+      "a": "train",
+      "b": "val",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 3,
+      "a": "train",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 3,
+      "a": "val",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 4,
+      "a": "train",
+      "b": "val",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 4,
+      "a": "train",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    },
+    {
+      "fold": 4,
+      "a": "val",
+      "b": "test",
+      "shared_time_sensor": 0,
+      "shared_sensor_only": 0,
+      "overlapping_file_pairs": 0
+    }
+  ]
+}

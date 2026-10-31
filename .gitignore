@@ -1,0 +1,13 @@
+exp/data/**/*.csv
+exp/ckpt/*
+!exp/ckpt/.gitkeep
+exp/logs/*
+!exp/logs/.gitkeep
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.pt
+*.pth
+.ipynb_checkpoints/

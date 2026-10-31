@@ -1,0 +1,49 @@
+h,model,sensor,RMSE,MAE,R2
+1,AR10,Accelerometer1RMS,0.021,0.009,0.618
+1,AR10,Accelerometer2RMS,0.024,0.011,0.445
+1,AR10,Current,0.478,0.355,0.079
+1,AR10,Pressure,1.005,0.703,-0.013
+1,AR10,Temperature,0.017,0.012,0.965
+1,AR10,Thermocouple,0.003,0.002,0.999
+1,AR10,Voltage,0.998,0.756,-0.008
+1,AR10,Volume Flow RateRMS,0.032,0.012,0.857
+1,naive,Accelerometer1RMS,0.016,0.008,0.766
+1,naive,Accelerometer2RMS,0.021,0.013,0.576
+1,naive,Current,0.638,0.449,-0.642
+1,naive,Pressure,1.362,0.943,-0.862
+1,naive,Temperature,0.02,0.014,0.949
+1,naive,Thermocouple,0.003,0.002,0.999
+1,naive,Voltage,1.398,1.108,-0.977
+1,naive,Volume Flow RateRMS,0.025,0.011,0.91
+5,AR10,Accelerometer1RMS,0.045,0.018,-0.767
+5,AR10,Accelerometer2RMS,0.044,0.019,-0.866
+5,AR10,Current,0.487,0.368,0.042
+5,AR10,Pressure,1.005,0.696,-0.014
+5,AR10,Temperature,0.02,0.014,0.951
+5,AR10,Thermocouple,0.005,0.003,0.997
+5,AR10,Voltage,0.998,0.756,-0.007
+5,AR10,Volume Flow RateRMS,0.049,0.019,0.692
+5,naive,Accelerometer1RMS,0.031,0.009,0.148
+5,naive,Accelerometer2RMS,0.034,0.012,-0.085
+5,naive,Current,0.646,0.46,-0.683
+5,naive,Pressure,1.413,1.019,-1.005
+5,naive,Temperature,0.022,0.016,0.94
+5,naive,Thermocouple,0.004,0.003,0.998
+5,naive,Voltage,1.41,1.111,-1.011
+5,naive,Volume Flow RateRMS,0.041,0.011,0.786
+10,AR10,Accelerometer1RMS,0.048,0.019,-1.032
+10,AR10,Accelerometer2RMS,0.046,0.02,-0.963
+10,AR10,Current,0.5,0.384,-0.01
+10,AR10,Pressure,1.003,0.692,-0.011
+10,AR10,Temperature,0.025,0.018,0.922
+10,AR10,Thermocouple,0.008,0.005,0.992
+10,AR10,Voltage,0.996,0.754,-0.006
+10,AR10,Volume Flow RateRMS,0.053,0.021,0.621
+10,naive,Accelerometer1RMS,0.033,0.01,0.054
+10,naive,Accelerometer2RMS,0.035,0.014,-0.134
+10,naive,Current,0.66,0.481,-0.762
+10,naive,Pressure,1.416,1.02,-1.013
+10,naive,Temperature,0.026,0.019,0.912
+10,naive,Thermocouple,0.007,0.005,0.993
+10,naive,Voltage,1.4,1.105,-0.988
+10,naive,Volume Flow RateRMS,0.042,0.011,0.76
