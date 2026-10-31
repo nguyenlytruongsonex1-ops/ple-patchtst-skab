@@ -50,6 +50,6 @@ Nhận xét trung thực:
 Chi tiết: `exp/results/summary_5models_5seeds.md`, `exp/results/summary_masking.md`, `exp/eda_forecast/report.md`, nhật ký quyết định `decision_log.md`.
 
 ## Ghi chú
-- Nhánh PatchTST-RBF (và PLE-FFN) có trong code/kết quả cũ nhưng đã được gác lại, không dùng trong báo cáo.
+- Một số nhánh thử nghiệm trước đó đã được khám phá và loại bỏ (lịch sử xem `decision_log.md`).
 - Bike Sharing và các bộ chuỗi thời gian khác là hướng mở rộng tương lai.
 - `exp/vendor/` chứa mã PatchTST gốc kèm giấy phép (`PatchTST_LICENSE`). Dữ liệu SKAB theo giấy phép của SKAB.

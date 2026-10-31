@@ -1,4 +1,4 @@
-"""Detection at t: PatchTST vs PatchTST-RBF, patch 8 stride 4, grouped 5-fold, 3 seeds. Adapted from source/run_forecast.py."""
+"""Detection at t: DLinear, PatchTST, PatchTST-wide, PatchTST-PLE-input, TabM; patch 8 stride 4, grouped 5-fold, 3 seeds. Adapted from source/run_forecast.py."""
 import sys,json,time,copy,random,argparse
 from pathlib import Path
 import numpy as np,pandas as pd,torch
@@ -11,21 +11,6 @@ from fast_attention import enable
 from tabm import TabM
 FEATURES=['Accelerometer1RMS','Accelerometer2RMS','Current','Pressure','Temperature','Thermocouple','Voltage','Volume Flow RateRMS']
 LR,DROP,EPOCHS,BS=1e-3,0.1,30,256
-class RBFResidual(nn.Module):  # copied verbatim from source/models_original.py
-    def __init__(self, original):
-        super().__init__();self.original=original;self.norm=nn.LayerNorm(32)
-        self.register_buffer('centers',torch.linspace(-2,2,8));self.projection=nn.Linear(32*8,32,bias=False);self.alpha=nn.Parameter(torch.tensor(0.01))
-    def forward(self,h):
-        phi=torch.exp(-0.5*((self.norm(h).unsqueeze(-1)-self.centers)/(4/7))**2)
-        return self.original(h)+self.alpha*self.projection(phi.flatten(-2))
-class PLEResidual(nn.Module):  # F(h)=FFN(h)+alpha*W*PLE(LN(h)), 8 equal bins on [-2,2]
-    def __init__(self, original):
-        super().__init__();self.original=original;self.norm=nn.LayerNorm(32)
-        e=torch.linspace(-2,2,9);self.register_buffer('lo',e[:-1]);self.register_buffer('w',e[1:]-e[:-1])
-        self.projection=nn.Linear(32*8,32,bias=False);self.alpha=nn.Parameter(torch.tensor(0.01))
-    def forward(self,h):
-        z=((self.norm(h).unsqueeze(-1)-self.lo)/self.w).clamp(0,1)
-        return self.original(h)+self.alpha*self.projection(z.flatten(-2))
 WIDE_DFF=191
 class PLEInput(nn.Module):  # x' = x + W_c . PLE(x) per channel, 8 equal bins on [-2,2], W zero-init, no bias, no norm
     def __init__(self,C=8,B=8):
@@ -50,8 +35,6 @@ class Model(nn.Module):
   self.n_patches=self.net.head_nf//32
   self.pin=PLEInput() if name=='PatchTST-PLE-input' else None
   self.net.head=nn.Sequential(nn.Flatten(1),nn.Dropout(drop),nn.Linear(8*self.net.head_nf,1))
-  if name in('PatchTST-RBF','PatchTST-PLE'):
-   for l in self.net.backbone.encoder.layers:l.ff=(RBFResidual if name.endswith('RBF') else PLEResidual)(l.ff)
   enable(self)
  def forward(self,x):return self.net(x).reshape(len(x),-1) if self.dl else self.net((self.pin(x) if self.pin is not None else x).transpose(1,2) if self.patch else x.flatten(1)).reshape(len(x),-1)
 @torch.no_grad()
@@ -87,9 +70,8 @@ def run(fold,name,seeds):
  for seed in seeds:
   t0=time.time();m,vap,be=train(name,seed,xtr,ytr,xv,yv);pv=predict(m,xv);pt=predict(m,xt)
   p,r,th=precision_recall_curve(yv,pv);fs=2*p[:-1]*r[:-1]/(p[:-1]+r[:-1]+1e-12);thr=float(th[fs.argmax()]);pr=pt>=thr
-  alpha=[float(l.ff.alpha) for l in m.net.backbone.encoder.layers] if name in('PatchTST-RBF','PatchTST-PLE') else None
   row=dict(fold=fold,model=name,seed=seed,params=sum(p.numel() for p in m.parameters()),n_patches=m.n_patches,n_train=len(ytr),n_val=len(yv),n_test=len(yt),pos_test=float(yt.mean()),val_AP=vap,best_epoch=be,threshold=thr,
-   AP=average_precision_score(yt,pt),AUC=roc_auc_score(yt,pt),F1=f1_score(yt,pr),Precision=precision_score(yt,pr,zero_division=0),Recall=recall_score(yt,pr),alpha=alpha[0] if alpha else None,W_abs_mean=float(m.pin.W.abs().mean()) if getattr(m,'pin',None) is not None else None,W_abs_max=float(m.pin.W.abs().max()) if getattr(m,'pin',None) is not None else None,seconds=time.time()-t0)
+   AP=average_precision_score(yt,pt),AUC=roc_auc_score(yt,pt),F1=f1_score(yt,pr),Precision=precision_score(yt,pr,zero_division=0),Recall=recall_score(yt,pr),W_abs_mean=float(m.pin.W.abs().mean()) if getattr(m,'pin',None) is not None else None,W_abs_max=float(m.pin.W.abs().max()) if getattr(m,'pin',None) is not None else None,seconds=time.time()-t0)
   (out/'preds').mkdir(exist_ok=True);np.savez_compressed(out/'preds'/f'f{fold}_{name}_s{seed}.npz',y=yt.numpy(),p=pt,thr=thr,**({'W':m.pin.W.detach().numpy()} if getattr(m,'pin',None) is not None else {}))
   pd.DataFrame([row]).to_csv(out/f'f{fold}_{name}_s{seed}.csv',index=False);print(json.dumps(row),flush=True)
 if __name__=='__main__':
