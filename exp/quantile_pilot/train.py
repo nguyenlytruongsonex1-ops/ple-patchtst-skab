@@ -45,7 +45,7 @@ def train_one(
     maximize: bool,
     seed: int,
     max_epochs: int = MAX_EPOCHS,
-    patience: int = PATIENCE,
+    patience: int | None = PATIENCE,
     batch_size: int = BATCH_SIZE,
     lr: float = LR,
     weight_decay: float = WEIGHT_DECAY,
@@ -103,7 +103,7 @@ def train_one(
             wait = 0
         else:
             wait += 1
-            if wait >= patience:
+            if patience is not None and wait >= patience:
                 break
     if best_state is None:
         raise RuntimeError("no checkpoint")
