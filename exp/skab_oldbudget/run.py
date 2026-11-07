@@ -3,6 +3,7 @@ Run: python -m exp.skab_oldbudget.run --output /workspace/results/unique-name
 """
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import os
 import platform
@@ -67,7 +68,8 @@ def main():
                start_time_saigon=time.strftime('%Y-%m-%d %H:%M:%S %Z'))
     save(out/'manifest.json',env)
     (out/'source.diff').write_bytes(diff)
-    (out/'pip-freeze.txt').write_bytes(subprocess.check_output([os.sys.executable,'-m','pip','freeze']))
+    (out/'installed-distributions.txt').write_text('\n'.join(sorted(
+        f"{d.metadata['Name']}=={d.version}" for d in importlib.metadata.distributions())))
     rows=[]
     started=time.monotonic()
     for fold in CONFIG['folds']:
