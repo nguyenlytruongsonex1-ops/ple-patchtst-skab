@@ -78,6 +78,7 @@ class RevINPatchTST(nn.Module):
         horizon: int = 1,
         dropout: float = DROPOUT,
         use_ple: bool = False,
+        use_revin: bool = True,
         edges: torch.Tensor | None = None,
         cnt_index: int = 0,
     ):
@@ -92,7 +93,12 @@ class RevINPatchTST(nn.Module):
         self.horizon = 1 if task == "classification" else horizon
         self.cnt_index = cnt_index
         self.use_ple = use_ple
-        self.revin = RevIN(n_features, eps=REVIN_EPS, affine=True, subtract_last=False)
+        if not use_revin and task != "classification":
+            raise ValueError("no-RevIN ablation is classification-only")
+        self.use_revin = use_revin
+        # RevIN initializes with constants and consumes no RNG; removing its
+        # 2*C affine parameters preserves the common backbone initialization.
+        self.revin = RevIN(n_features, eps=REVIN_EPS, affine=True, subtract_last=False) if use_revin else None
         self.ple = None
         if use_ple:
             if edges is None:
@@ -133,6 +139,8 @@ class RevINPatchTST(nn.Module):
     def pre_affine(self, x: torch.Tensor):
         """Per-window RevIN before the learnable affine. Also stores mean and std."""
         self._check(x)
+        if self.revin is None:
+            return x
         self.revin._get_statistics(x)
         z = (x - self.revin.mean) / self.revin.stdev
         return z
@@ -147,7 +155,7 @@ class RevINPatchTST(nn.Module):
         z = self.pre_affine(x)
         if self.ple is not None:
             z = self.ple(z)
-        if self.revin.affine:
+        if self.revin is not None and self.revin.affine:
             z = z * self.revin.affine_weight + self.revin.affine_bias
         # Backbone consumes [batch, channel, time] and does not run RevIN again.
         raw = self.net(z.transpose(1, 2))
@@ -204,6 +212,7 @@ def build_model(
     dropout: float = DROPOUT,
     edges: torch.Tensor | None = None,
     cnt_index: int = 0,
+    use_revin: bool = True,
 ) -> nn.Module:
     if name == EQUAL_BIN_MODEL:
         raise ValueError(
@@ -221,6 +230,7 @@ def build_model(
         horizon=horizon,
         dropout=dropout,
         use_ple=name == "PatchTST-PLE-quantile",
+        use_revin=use_revin,
         edges=edges,
         cnt_index=cnt_index,
     )

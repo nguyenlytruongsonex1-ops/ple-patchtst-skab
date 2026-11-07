@@ -17,3 +17,24 @@ Run 18-test correctness suite first. Its combined official-data integration test
 requires Bike too and skips without it; SKAB hashes are independently asserted.
 Historical comparison is descriptive: RevIN and bin construction both change,
 and historical runtime hardware differs. Do not attribute change to bins alone.
+
+## Authorized no-RevIN ablation (2026-11-07)
+Use `--no-revin` to run only quantile PLE without RevIN. Default is still RevIN on.
+StandardScaler stays train-only and unchanged. Fit 8-bin knots on TRAIN windows
+in global-scaled coordinates (not on raw units or RevIN outputs). No reused RevIN
+knots; PLE input and knot coordinates match. No RevIN affine parameters when off:
+13,218 vs 13,234 parameters, a difference of 16 for 8 channels.
+
+All 25 old-budget jobs, splits, seed values, optimizer, batching, checkpoint and
+threshold rules remain fixed. Tests verify all common initial weights agree for
+seeds 0..4 on/off, and zero-PLE/no-RevIN matches the old plain PatchTST exactly.
+RevIN uses constant initialization, consuming no RNG; the default RevIN-on path
+was additionally compared bitwise against afe8b7d weights and predictions.
+This is a whole RevIN-pipeline ablation, including different quantile coordinates
+and the affine removal; it does not keep literal encodings identical.
+
+Compare descriptively to the existing 25 RevIN-on runs, pairing fold+seed labels,
+then averaging seeds within each fold. Fold SD uses ddof=1. Do not treat 25 runs
+as independent datasets or claim harm on all tasks; folds share training data.
+No baseline retraining, test tuning, seed selection, or model expansions.
+`progress.json` gives completed count and observed-time remaining estimate.

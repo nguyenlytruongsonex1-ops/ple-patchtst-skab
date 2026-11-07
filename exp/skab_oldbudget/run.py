@@ -19,7 +19,7 @@ import torch
 from sklearn.metrics import (average_precision_score, precision_recall_curve,
                              roc_auc_score, f1_score, precision_score, recall_score)
 from exp.quantile_pilot.data_skab import load_skab_fold, groups_are_intact
-from exp.quantile_pilot.ple import fit_revin_quantile_edges
+from exp.quantile_pilot.ple import fit_revin_quantile_edges, fit_scaled_quantile_edges
 from exp.quantile_pilot.models import build_model, predict
 from exp.quantile_pilot.train import train_one
 
@@ -47,7 +47,10 @@ def save(p, value):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--no-revin', action='store_true', help='classification ablation; keep train-only StandardScaler')
     a = parser.parse_args()
+    config = dict(CONFIG, use_revin=not a.no_revin, revin_affine=not a.no_revin,
+                  knot_space='global-scaled' if a.no_revin else 'pre-affine-RevIN')
     out = a.output
     out.mkdir(parents=True, exist_ok=False)  # never overwrite another experiment
     torch.set_num_threads(1)
@@ -58,8 +61,8 @@ def main():
     assert actual == pins, 'raw data hash mismatch'
     diff = subprocess.check_output(['git', 'diff', 'HEAD'], cwd=ROOT)
     env = dict(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
-               diff_sha256=hashlib.sha256(diff).hexdigest(), config=CONFIG,
-               config_sha256=hashlib.sha256(json.dumps(CONFIG,sort_keys=True).encode()).hexdigest(),
+               diff_sha256=hashlib.sha256(diff).hexdigest(), config=config,
+               config_sha256=hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest(),
                raw_hashes=actual, splits_sha256=sha(ROOT/'exp/splits.json'),
                platform=platform.platform(), processor=platform.processor(),
                cpu_count=os.cpu_count(), cpu_info=Path('/proc/cpuinfo').read_text(),
@@ -72,6 +75,7 @@ def main():
         f"{d.metadata['Name']}=={d.version}" for d in importlib.metadata.distributions())))
     rows=[]
     started=time.monotonic()
+    save(out/'progress.json',dict(completed=0,total=25,status='running',elapsed_seconds=0))
     for fold in CONFIG['folds']:
         data=load_skab_fold(fold)
         parts=data['parts']
@@ -80,7 +84,7 @@ def main():
         # which load_skab_fold directly calls. Record full arrays and scaler hashes.
         hashes={s:{k:array_sha(parts[s][k]) for k in ('x','y')} for s in parts}
         hashes.update(scaler_mean=array_sha(data['scaler_mean']),scaler_scale=array_sha(data['scaler_scale']))
-        edges=fit_revin_quantile_edges(train['x'])
+        edges=(fit_scaled_quantile_edges if a.no_revin else fit_revin_quantile_edges)(train['x'])
         np.savez_compressed(out/f'fold{fold}_preprocessing.npz', edges=edges.numpy(),
                             scaler_mean=data['scaler_mean'],scaler_scale=data['scaler_scale'])
         save(out/f'fold{fold}_hashes.json',hashes)
@@ -88,11 +92,11 @@ def main():
         assert len(train['y']) % CONFIG['batch_size'] != 1
         for seed in CONFIG['seeds']:
             t0=time.monotonic()
-            row=dict(fold=fold, seed=seed, model=CONFIG['model'], status='running')
+            row=dict(fold=fold, seed=seed, model=CONFIG['model'], use_revin=not a.no_revin, status='running')
             print(json.dumps(row),flush=True)
             try:
                 fit=train_one(lambda:build_model(CONFIG['model'],task='classification',
-                    n_features=data['n_features'],lookback=60,edges=edges),
+                    n_features=data['n_features'],lookback=60,edges=edges,use_revin=not a.no_revin),
                     task='classification',x_train=train['x'],y_train=train['y'],
                     x_val=val['x'],y_val=val['y'],
                     score_from_pred=lambda p:average_precision_score(val['y'],p),maximize=True,
@@ -119,6 +123,11 @@ def main():
             row.update(seconds=time.monotonic()-t0, peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
             save(out/f'f{fold}_s{seed}.json',row)
             rows.append(row)
+            elapsed=time.monotonic()-started
+            save(out/'progress.json',dict(completed=len(rows),total=25,status='running',
+                failures=sum(r['status']!='complete' for r in rows),elapsed_seconds=elapsed,
+                estimated_remaining_seconds=elapsed/len(rows)*(25-len(rows)),
+                updated_saigon=time.strftime('%Y-%m-%d %H:%M:%S %Z')))
             pd.DataFrame([{k:v for k,v in r.items() if k!='history'} for r in rows]).to_csv(out/'runs.csv',index=False)
             print(json.dumps(row),flush=True)
     df=pd.DataFrame(rows)
@@ -130,6 +139,7 @@ def main():
                  peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
                  note='Seeds averaged within fold, then mean/std across five folds. Historical comparison conflates RevIN and quantile bins; not causal or hardware-matched timing.')
     save(out/'summary.json',summary)
+    save(out/'progress.json',dict(completed=25,total=25,status='complete',elapsed_seconds=time.monotonic()-started))
     print(json.dumps(summary),flush=True)
 
 if __name__=='__main__':

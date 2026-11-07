@@ -145,3 +145,19 @@ class QuantilePLE(nn.Module):
 def degenerate_edge_fraction(edges: torch.Tensor, width_eps: float = WIDTH_EPS) -> float:
     width = edges[:, 1:] - edges[:, :-1]
     return float((width <= width_eps).float().mean().item())
+
+
+@torch.no_grad()
+def fit_scaled_quantile_edges(x_scaled: torch.Tensor, n_bins: int = N_BINS) -> torch.Tensor:
+    """TRAIN-window quantiles in global StandardScaler coordinates, no RevIN.
+
+    No validation/test data or labels accepted. Unlike fit_revin_quantile_edges,
+    these knots must only encode inputs that have NOT been instance-normalized.
+    """
+    x = torch.as_tensor(x_scaled, dtype=torch.float32, device="cpu").detach()
+    if x.ndim != 3 or x.shape[0] < 2 or n_bins < 2:
+        raise ValueError("expected at least two [N,L,C] train windows and n_bins>=2")
+    if not torch.isfinite(x).all():
+        raise ValueError("training windows contain non-finite values")
+    probs = torch.linspace(0., 1., n_bins + 1, dtype=x.dtype)
+    return torch.quantile(x.reshape(-1, x.shape[-1]), probs, dim=0).T.contiguous()
