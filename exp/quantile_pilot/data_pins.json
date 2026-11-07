@@ -1,0 +1,26 @@
+{
+  "skab": {
+    "name": "Skoltech Anomaly Benchmark v0.9",
+    "url": "https://github.com/waico/SKAB",
+    "commit": "b2c0d46c2971dcbfe71e26087b6d231998bb91c2",
+    "commit_url": "https://github.com/waico/SKAB/tree/b2c0d46c2971dcbfe71e26087b6d231998bb91c2",
+    "tarball": "https://codeload.github.com/waico/SKAB/tar.gz/b2c0d46c2971dcbfe71e26087b6d231998bb91c2",
+    "file_sha256_manifest": "exp/data_hashes.json",
+    "doi": "10.34740/KAGGLE/DSV/1693952",
+    "license": "GPL-3.0 (upstream dataset; not vendored in this repo)"
+  },
+  "bike": {
+    "name": "Bike Sharing Dataset",
+    "uci": "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset",
+    "zip_url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip",
+    "zip_sha256": "b70182d0d0508e9abbb79306ce5c0cec34869000f8220175ac83d11dbe845401",
+    "hour_csv_sha256": "e03de4ee4ef4dc376ac6e04bf829673c6269e8eba5c60fa121640fa2f829504f",
+    "hour_csv_md5": "d50bd5a6f55131e72a7bedc334e2fce1",
+    "citation": "Fanaee-T, H. and Gama, J. Event labeling combining ensemble detectors and background knowledge. Progress in Artificial Intelligence (2013/2014). UCI ML Repository dataset 275."
+  },
+  "models": {
+    "patchtst_vendor": "exp/vendor (Apache-2.0, see exp/vendor/PatchTST_LICENSE)",
+    "tabm": "Python package tabm==0.0.3 (yandex-research/tabm), already pinned in requirements.txt",
+    "ple": "Gorishniy, Rubachev, Babenko. On Embeddings for Numerical Features in Tabular Deep Learning. NeurIPS 2022. Encoding matches the clamp-[0,1] residual already in run_detect.PLEInput; edges are per-feature quantiles in pre-affine RevIN space."
+  }
+}

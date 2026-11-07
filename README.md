@@ -51,5 +51,8 @@ Chi tiết: `exp/results/summary_5models_5seeds.md`, `exp/results/summary_maskin
 
 ## Ghi chú
 - Một số nhánh thử nghiệm trước đó đã được khám phá và loại bỏ (lịch sử xem `decision_log.md`).
-- Bike Sharing và các bộ chuỗi thời gian khác là hướng mở rộng tương lai.
 - `exp/vendor/` chứa mã PatchTST gốc kèm giấy phép (`PatchTST_LICENSE`). Dữ liệu SKAB theo giấy phép của SKAB.
+
+## Pilot đề xuất — chưa chạy
+
+Nhánh quantile PLE (SKAB phân loại + Bike dự báo `cnt`) nằm ở `exp/quantile_pilot/PROTOCOL.md`. Ba phương pháp: PatchTST, PatchTST-PLE-quantile, TabM. Bảng AP phía trên là kết quả cũ, không phải pilot này. Chưa có điểm mô hình mới. Lệnh train chỉ chạy sau khi mã đã ở trên GitHub và được duyệt; xem protocol.

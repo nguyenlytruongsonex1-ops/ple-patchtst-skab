@@ -1,6 +1,10 @@
 exp/data/**/*.csv
+exp/data/**/*.zip
+exp/data/**/*.gz
 exp/ckpt/*
 !exp/ckpt/.gitkeep
+exp/quantile_pilot/ckpt/*
+exp/quantile_pilot/results/*
 exp/logs/*
 !exp/logs/.gitkeep
 __pycache__/
